@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luka's Week in LA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #fdfbf7;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 48px 20px 100px;
+      overflow-x: hidden;
+    }
+
+    canvas#confetti {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 56px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .header .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #d9306b;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: #1a1a1a;
+    }
+
+    .header h1 .highlight {
+      background: linear-gradient(120deg, #ff6ec7 0%, #ff4e50 40%, #f9a825 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .sub {
+      margin-top: 12px;
+      color: #bbb;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .header .tagline {
+      margin-top: 16px;
+      font-size: 1rem;
+      color: #888;
+      font-weight: 400;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .day-card {
+      background: #ffffff;
+      border: 1.5px solid #ede9e0;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .day-card:nth-child(1) { animation-delay: 0.05s; }
+    .day-card:nth-child(2) { animation-delay: 0.1s; }
+    .day-card:nth-child(3) { animation-delay: 0.15s; }
+    .day-card:nth-child(4) { animation-delay: 0.2s; }
+    .day-card:nth-child(5) { animation-delay: 0.25s; }
+    .day-card:nth-child(6) { animation-delay: 0.3s; }
+
+    .day-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+    }
+
+    .day-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1.5px solid #f5f0e8;
+      position: relative;
+    }
+
+    .day-header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .day-emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .day-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .day-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #1a1a1a;
+    }
+
+    .day-date {
+      font-size: 0.82rem;
+      color: #bbb;
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    /* Accent colors per day */
+    .thursday { --accent: #2d7dd2; }
+    .friday { --accent: #25a55a; }
+    .saturday { --accent: #d9306b; }
+    .sunday { --accent: #d08000; }
+    .monday { --accent: #7c4dcc; }
+    .tuesday { --accent: #d95f00; }
+
+    .day-header { border-top: 4px solid var(--accent); }
+    .day-label { color: var(--accent); }
+
+    .events {
+      padding: 16px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .event {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .event-time {
+      font-size: 0.7rem;
+      color: #ccc;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      min-width: 54px;
+      padding-top: 3px;
+      font-variant-numeric: tabular-nums;
+      text-transform: uppercase;
+    }
+
+    .event-body { flex: 1; }
+
+    .event-title {
+      font-size: 0.93rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+
+    .event-note {
+      font-size: 0.77rem;
+      color: #bbb;
+      margin-top: 3px;
+      line-height: 1.45;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 5px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .tag-travel { background: #deeeff; color: #2d7dd2; }
+    .tag-food { background: #d6f5e3; color: #1a8c4a; }
+    .tag-work { background: #fff3d0; color: #a07000; }
+    .tag-vibe { background: #ede8ff; color: #6b3fc9; }
+    .tag-night { background: #ffe0e8; color: #c4204e; }
+    .tag-pride { background: #fce4ef; color: #c4204e; }
+    .tag-active { background: #d6f5ec; color: #1a8a6a; }
+    .tag-tentative { background: #fff8e1; color: #a07000; border: 1px dashed #e8c94a; }
+    .tag-dinner { background: #fff0e0; color: #c45a00; }
+
+    .divider {
+      height: 1px;
+      background: #f5f0e8;
+      margin: 2px 0;
+    }
+
+    .free-day {
+      padding: 36px 24px;
+      text-align: center;
+    }
+
+    .free-day .free-emoji {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .free-day .free-label {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ddd;
+      letter-spacing: -0.01em;
+    }
+
+    .free-day .free-note {
+      font-size: 0.8rem;
+      color: #ddd;
+      margin-top: 6px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 56px;
+      color: #ccc;
+      font-size: 0.8rem;
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+
+    .footer .heart {
+      color: #ff6ec7;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="header">
+  <div class="eyebrow">You're gonna love it here</div>
+  <h1>Luka's Week<br>in <span class="highlight">LA</span></h1>
+  <div class="sub">Los Angeles &nbsp;·&nbsp; June 4 - 9, 2026</div>
+  <div class="tagline">No excuses. Come.</div>
+</div>
+
+<div class="grid">
+
+  <!-- THURSDAY -->
+  <div class="day-card thursday">
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div>
+          <div class="day-label">Day 1</div>
+          <div class="day-name">Thursday</div>
+          <div class="day-date">June 4</div>
+        </div>
+        <div class="day-emoji">✈️</div>
+      </div>
+    </div>
+    <div class="events">
+      <div class="event">
+        <div class="event-time">2:30 PM</div>
+        <div class="event-body">
+          <div class="event-title">Airport Pickup</div>
+          <div class="event-note">LAX or BUR - you'll be greeted</div>
+          <div class="tags"><span class="tag tag-travel">Travel</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">3:00 PM</div>
+        <div class="event-body">
+          <div class="event-title">Settle In + Work Block</div>
+          <div class="event-note">Unpack, get comfortable, work from home</div>
+          <div class="tags"><span class="tag tag-work">Work</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Dinner</div>
+        <div class="event-body">
+          <div class="event-title">Dinner at Kazunori</div>
+          <div class="event-note">Best hand roll bar in the city - get there early, no reservations</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">10:00 PM</div>
+        <div class="event-body">
+          <div class="event-title">Love Island Night</div>
+          <div class="event-note">Decompress, catch up, vibe</div>
+          <div class="tags"><span class="tag tag-vibe">Vibe</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRIDAY -->
+  <div class="day-card friday">
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div>
+          <div class="day-label">Day 2</div>
+          <div class="day-name">Friday</div>
+          <div class="day-date">June 5</div>
+        </div>
+        <div class="day-emoji">🥾</div>
+      </div>
+    </div>
+    <div class="events">
+      <div class="event">
+        <div class="event-time">Morning</div>
+        <div class="event-body">
+          <div class="event-title">Morning Hike</div>
+          <div class="event-note">Runyon Canyon or Griffith Park - views of the whole city</div>
+          <div class="tags"><span class="tag tag-active">Active</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Late AM</div>
+        <div class="event-body">
+          <div class="event-title">Brunch</div>
+          <div class="event-note">Post-hike fuel</div>
+          <div class="tags"><span class="tag tag-food">Food</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Afternoon</div>
+        <div class="event-body">
+          <div class="event-title">Chill at Home</div>
+          <div class="event-note">Recover, get ready for the night</div>
+          <div class="tags"><span class="tag tag-vibe">Vibe</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Night</div>
+        <div class="event-body">
+          <div class="event-title">Go Out</div>
+          <div class="event-note">Pride kickoff on Santa Monica Blvd</div>
+          <div class="tags"><span class="tag tag-night">Night Out</span><span class="tag tag-pride">Pride</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SATURDAY -->
+  <div class="day-card saturday">
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div>
+          <div class="day-label">Day 3 - The Big One</div>
+          <div class="day-name">Saturday</div>
+          <div class="day-date">June 6</div>
+        </div>
+        <div class="day-emoji">🌊</div>
+      </div>
+    </div>
+    <div class="events">
+      <div class="event">
+        <div class="event-time">Morning</div>
+        <div class="event-body">
+          <div class="event-title">Homemade Breakfast</div>
+          <div class="event-note">Slow morning, cook at home</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-vibe">Vibe</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Afternoon</div>
+        <div class="event-body">
+          <div class="event-title">Beach Day with Stephen</div>
+          <div class="event-note">Santa Monica or Malibu - TBD</div>
+          <div class="tags"><span class="tag tag-active">Active</span><span class="tag tag-tentative">Tentative</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Alt.</div>
+        <div class="event-body">
+          <div class="event-title">Museum</div>
+          <div class="event-note">LACMA, The Broad, or MOCA if no beach</div>
+          <div class="tags"><span class="tag tag-vibe">Culture</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Night</div>
+        <div class="event-body">
+          <div class="event-title">Pride Saturday</div>
+          <div class="event-note">Biggest night of the weekend - WeHo block parties, Santa Monica Blvd</div>
+          <div class="tags"><span class="tag tag-night">Night Out</span><span class="tag tag-pride">Pride</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUNDAY -->
+  <div class="day-card sunday">
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div>
+          <div class="day-label">Day 4</div>
+          <div class="day-name">Sunday</div>
+          <div class="day-date">June 7</div>
+        </div>
+        <div class="day-emoji">☕</div>
+      </div>
+    </div>
+    <div class="events">
+      <div class="event">
+        <div class="event-time">Morning</div>
+        <div class="event-body">
+          <div class="event-title">Brunch</div>
+          <div class="event-note">Recovery brunch - earned it</div>
+          <div class="tags"><span class="tag tag-food">Food</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Afternoon</div>
+        <div class="event-body">
+          <div class="event-title">Work in Silverlake</div>
+          <div class="event-note">Best cafes: Intelligentsia, Go Get Em Tiger</div>
+          <div class="tags"><span class="tag tag-work">Work</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONDAY -->
+  <div class="day-card monday">
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div>
+          <div class="day-label">Day 5</div>
+          <div class="day-name">Monday</div>
+          <div class="day-date">June 8</div>
+        </div>
+        <div class="day-emoji">🌴</div>
+      </div>
+    </div>
+    <div class="free-day">
+      <div class="free-label">Free Day</div>
+      <div class="free-note">No plans - go wherever the weekend takes you</div>
+    </div>
+  </div>
+
+  <!-- TUESDAY -->
+  <div class="day-card tuesday">
+    <div class="day-header">
+      <div class="day-header-inner">
+        <div>
+          <div class="day-label">Day 6</div>
+          <div class="day-name">Tuesday</div>
+          <div class="day-date">June 9</div>
+        </div>
+        <div class="day-emoji">👋</div>
+      </div>
+    </div>
+    <div class="free-day">
+      <div class="free-label">Free Day</div>
+      <div class="free-note">Last day - make it count</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Made with <span class="heart">♥</span> for Luka &nbsp;·&nbsp; West Hollywood, CA
+</div>
+
+<script>
+  // Confetti
+  (function() {
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    const colors = ['#ff6ec7','#ff4e50','#f9a825','#43e97b','#4facfe','#a78bfa','#fb923c','#38f9d7'];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function Particle() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * -H;
+      this.w = Math.random() * 10 + 5;
+      this.h = Math.random() * 5 + 3;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.speed = Math.random() * 3 + 2;
+      this.angle = Math.random() * Math.PI * 2;
+      this.spin = (Math.random() - 0.5) * 0.2;
+      this.drift = (Math.random() - 0.5) * 1.5;
+      this.opacity = 1;
+    }
+
+    Particle.prototype.update = function() {
+      this.y += this.speed;
+      this.x += this.drift;
+      this.angle += this.spin;
+      if (this.y > H * 0.6) {
+        this.opacity = Math.max(0, 1 - (this.y - H * 0.6) / (H * 0.4));
+      }
+    };
+
+    Particle.prototype.draw = function() {
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+      ctx.restore();
+    };
+
+    function init() {
+      resize();
+      particles = [];
+      for (let i = 0; i < 160; i++) {
+        const p = new Particle();
+        p.y = Math.random() * H * -0.5 - 10;
+        particles.push(p);
+      }
+    }
+
+    let frame = 0;
+    const maxFrames = 220;
+
+    function loop() {
+      if (frame > maxFrames) {
+        ctx.clearRect(0, 0, W, H);
+        return;
+      }
+      ctx.clearRect(0, 0, W, H);
+      for (let p of particles) {
+        p.update();
+        p.draw();
+      }
+      frame++;
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('load', () => {
+      init();
+      loop();
+    });
+  })();
+</script>
+
+</body>
+</html>
