@@ -259,6 +259,65 @@
       color: #ff6ec7;
     }
 
+    .tv-section {
+      max-width: 1200px;
+      margin: 32px auto 0;
+      background: #ffffff;
+      border: 1.5px solid #ede9e0;
+      border-radius: 20px;
+      border-top: 4px solid #1a1a1a;
+      padding: 24px 28px;
+      animation: fadeUp 0.6s ease 0.35s both;
+    }
+
+    .tv-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tv-emoji { font-size: 1.3rem; }
+
+    .tv-title {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+
+    .tv-items {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tv-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fdfbf7;
+      border: 1.5px solid #ede9e0;
+      border-radius: 12px;
+      padding: 12px 18px;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .tv-item-emoji { font-size: 1.4rem; }
+
+    .tv-item-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .tv-item-note {
+      font-size: 0.74rem;
+      color: #bbb;
+      margin-top: 2px;
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -317,15 +376,6 @@
           <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
         </div>
       </div>
-      <div class="divider"></div>
-      <div class="event">
-        <div class="event-time">10:00 PM</div>
-        <div class="event-body">
-          <div class="event-title">Love Island Night</div>
-          <div class="event-note">Decompress, catch up, vibe</div>
-          <div class="tags"><span class="tag tag-vibe">Vibe</span></div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -370,6 +420,15 @@
       </div>
       <div class="divider"></div>
       <div class="event">
+        <div class="event-time">Dinner</div>
+        <div class="event-body">
+          <div class="event-title">Dinner</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
         <div class="event-time">Night</div>
         <div class="event-body">
           <div class="event-title">Go Out</div>
@@ -405,9 +464,18 @@
       <div class="event">
         <div class="event-time">Afternoon</div>
         <div class="event-body">
-          <div class="event-title">Beach Day with Stephen</div>
-          <div class="event-note">Santa Monica or Malibu - TBD</div>
+          <div class="event-title">Malibu Beach</div>
+          <div class="event-note">Malibu - TBD</div>
           <div class="tags"><span class="tag tag-active">Active</span><span class="tag tag-tentative">Tentative</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">After</div>
+        <div class="event-body">
+          <div class="event-title">Alex's House in Calabasas</div>
+          <div class="event-note">Stop by on the way back from Malibu</div>
+          <div class="tags"><span class="tag tag-vibe">Vibe</span></div>
         </div>
       </div>
       <div class="divider"></div>
@@ -417,6 +485,15 @@
           <div class="event-title">Museum</div>
           <div class="event-note">LACMA, The Broad, or MOCA if no beach</div>
           <div class="tags"><span class="tag tag-vibe">Culture</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Dinner</div>
+        <div class="event-body">
+          <div class="event-title">Dinner</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
         </div>
       </div>
       <div class="divider"></div>
@@ -461,6 +538,15 @@
           <div class="tags"><span class="tag tag-work">Work</span></div>
         </div>
       </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Dinner</div>
+        <div class="event-body">
+          <div class="event-title">Dinner</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -476,9 +562,24 @@
         <div class="day-emoji">🌴</div>
       </div>
     </div>
-    <div class="free-day">
-      <div class="free-label">Free Day</div>
-      <div class="free-note">No plans - go wherever the weekend takes you</div>
+    <div class="events">
+      <div class="event">
+        <div class="event-time">Afternoon</div>
+        <div class="event-body">
+          <div class="event-title">Work Block</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-work">Work</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Dinner</div>
+        <div class="event-body">
+          <div class="event-title">Dinner</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -494,12 +595,75 @@
         <div class="day-emoji">👋</div>
       </div>
     </div>
-    <div class="free-day">
-      <div class="free-label">Free Day</div>
-      <div class="free-note">Last day - make it count</div>
+    <div class="events">
+      <div class="event">
+        <div class="event-time">Day</div>
+        <div class="event-body">
+          <div class="event-title">Manhattan Beach</div>
+          <div class="event-note">Last beach day - best in LA</div>
+          <div class="tags"><span class="tag tag-active">Active</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Afternoon</div>
+        <div class="event-body">
+          <div class="event-title">Work Block</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-work">Work</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Dinner</div>
+        <div class="event-body">
+          <div class="event-title">Dinner</div>
+          <div class="event-note">TBD</div>
+          <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-dinner">Dinner</span></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="event">
+        <div class="event-time">Night</div>
+        <div class="event-body">
+          <div class="event-title">Airport Drop-off</div>
+          <div class="event-note">See you next time</div>
+          <div class="tags"><span class="tag tag-travel">Travel</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
+</div>
+
+<div class="tv-section">
+  <div class="tv-header">
+    <span class="tv-emoji">📺</span>
+    <span class="tv-title">On TV This Week</span>
+  </div>
+  <div class="tv-items">
+    <div class="tv-item">
+      <span class="tv-item-emoji">🌹</span>
+      <div>
+        <div class="tv-item-title">Love Island</div>
+        <div class="tv-item-note">Nightly watch parties</div>
+      </div>
+    </div>
+    <div class="tv-item">
+      <span class="tv-item-emoji">⚽</span>
+      <div>
+        <div class="tv-item-title">World Cup</div>
+        <div class="tv-item-note">Group stage matches all week</div>
+      </div>
+    </div>
+    <div class="tv-item">
+      <span class="tv-item-emoji">🏀</span>
+      <div>
+        <div class="tv-item-title">NBA Finals</div>
+        <div class="tv-item-note">Watch party TBD</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="footer">
